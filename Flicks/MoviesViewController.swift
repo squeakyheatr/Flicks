@@ -56,17 +56,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath)
-        
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
         let movie = movies![indexPath.row]
-        
-        
+        let overview = movie["overview"] as! String
         let title = movie["title"] as! String
         
+        cell.TitleLabel.text = title
+        cell.OverViewLabel.text = overview
+
         
-        cell.textLabel!.text = title
         print("Row \(indexPath.row)")
         return cell
     }
