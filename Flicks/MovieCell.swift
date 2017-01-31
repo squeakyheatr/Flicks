@@ -12,7 +12,7 @@ class MovieCell: UITableViewCell {
 
     @IBOutlet var TitleLabel: UILabel!
     @IBOutlet var OverViewLabel: UILabel!
-    
+    @IBOutlet var MovieImageView: UIImageView! 
     
     override func awakeFromNib() {
         super.awakeFromNib()
