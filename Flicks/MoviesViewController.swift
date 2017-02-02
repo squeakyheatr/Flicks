@@ -8,11 +8,16 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
+ 
  
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDelegate{
     
     var movies: [NSDictionary]?
+    
+    var refreshControl = UIRefreshControl()
+    
     
     @IBOutlet var MovieTableView: UITableView!
     
@@ -21,7 +26,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
         MovieTableView.dataSource = self
         // Do any additional setup after loading the view.
         
-        
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
@@ -31,6 +37,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     
+                    MBProgressHUD.hide(for: self.view, animated: true)
+
                     self.movies = dataDictionary["results"] as! [NSDictionary]
                     self.MovieTableView.reloadData()
                     
@@ -41,7 +49,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
             }
         }
         task.resume()
-        
+        MovieTableView.refreshControl = self.refreshControl
+        self.refreshControl.addTarget(self, action: "didRefreshList", for: .valueChanged )
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,7 +68,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
-        
+        if (movies?.count)! > 0{
         let baseURL = "https://image.tmdb.org/t/p/w500"
         
         let movie = movies![indexPath.row]
@@ -75,16 +84,36 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
         
         print("Row \(indexPath.row)")
         return cell
+        } else {
+            cell.TitleLabel.text = "Sorry No Network Connection"
+            return cell
+        }
     }
 
-    /*
-    // MARK: - Navigation
+   func didRefreshList(){
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        MBProgressHUD.showAdded(to: self.view, animated: true)
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            if let data = data {
+                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                    print(dataDictionary)
+                    
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    self.movies = dataDictionary["results"] as! [NSDictionary]
+                    self.MovieTableView.reloadData()
+                    
+                    
+                    
+                    
+                }
+            }
+        }
+        task.resume()
+        self.refreshControl.endRefreshing()
     }
-    */
 
 }
