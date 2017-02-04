@@ -14,9 +14,13 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
-    @IBOutlet var MovieSearchBar: UISearchBar!
+    let searchController = UISearchController(searchResultsController: nil)
     
     var movies: [NSDictionary]?
+    
+    var filteredMovies = [movies]()
+    
+    
     
     var refreshControl = UIRefreshControl()
     
@@ -51,7 +55,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         }
         task.resume()
 
-            
+        
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        MovieTableView.tableHeaderView = searchController.searchBar
+        
         MovieTableView.refreshControl = self.refreshControl
         self.refreshControl.addTarget(self, action: "didRefreshList", for: .valueChanged )
     }
@@ -64,7 +73,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filteredMovies.count
+        }
         if let movies = movies{
             return movies.count
         } else {
@@ -73,10 +84,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        
         let baseURL = "https://image.tmdb.org/t/p/w500"
         
-        let movie = movies![indexPath.row]
+        var movie: movies
+        
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            movie = filteredMovies[indexPath.row]
+        } else {
+            movie = movies![indexPath.row]
+        }
+        
         let overview = movie["overview"] as! String
         let title = movie["title"] as! String
         let posterPath = movie["poster_path"] as! String
@@ -119,6 +140,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.refreshControl.endRefreshing()
     }
     
+    func filterContentForSearchText(searchText: String, scope: String = "All") {
+        filteredMovies = movies!.filter { results in
+            return movies..lowercaseString.containsString(searchText.lowercaseString)
+        }
+        
+        MovieTableView.reloadData()
+    }
 
 
 }
+ 
+ extension MoviesViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchText: searchController.searchBar.text!)
+    }
+ }
