@@ -12,7 +12,9 @@ import MBProgressHUD
  
  
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDelegate{
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
+    
+    @IBOutlet var MovieSearchBar: UISearchBar!
     
     var movies: [NSDictionary]?
     
@@ -35,7 +37,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let data = data {
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                    print(dataDictionary)
                     
                     MBProgressHUD.hide(for: self.view, animated: true)
 
@@ -59,8 +60,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        
         if let movies = movies{
-        return movies.count
+            return movies.count
         } else {
             return 0
         }
@@ -68,7 +70,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
-        if (movies?.count)! > 0{
         let baseURL = "https://image.tmdb.org/t/p/w500"
         
         let movie = movies![indexPath.row]
@@ -82,12 +83,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
         cell.OverViewLabel.text = overview
 
         
-        print("Row \(indexPath.row)")
         return cell
-        } else {
-            cell.TitleLabel.text = "Sorry No Network Connection"
-            return cell
-        }
     }
 
    func didRefreshList(){
@@ -100,7 +96,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let data = data {
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                    print(dataDictionary)
                     
                     MBProgressHUD.hide(for: self.view, animated: true)
                     self.movies = dataDictionary["results"] as! [NSDictionary]
@@ -108,12 +103,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITabBarDel
                     
                     
                     
-                    
+                    print("is refreshing")
                 }
             }
         }
         task.resume()
         self.refreshControl.endRefreshing()
     }
+    
+
 
 }
