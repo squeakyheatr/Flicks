@@ -56,14 +56,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.refreshControl.addTarget(self, action: "didRefreshList", for: .valueChanged )
     }
 
-        override func viewDidAppear(_ animated: Bool) {
-            UIView.animate(withDuration: 2, animations: {
-                    self.MovieTableView.layer.opacity = 1})
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0, animations: {
-            self.MovieTableView.layer.opacity = 0})
-    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -89,7 +82,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let posterPath = movie["poster_path"] as! String
         let imageURL = NSURL(string: baseURL + posterPath)
         
+        cell.MovieImageView.alpha = 0
         cell.MovieImageView.setImageWith(imageURL! as URL)
+        UIView.animate(withDuration: 1, animations: {
+            cell.MovieImageView.alpha = 1
+        })
         cell.TitleLabel.text = title
         cell.OverViewLabel.text = overview
 

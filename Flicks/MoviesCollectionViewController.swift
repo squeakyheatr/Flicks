@@ -45,14 +45,6 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
 
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 2, animations: {
-            self.moviesCollectionView.layer.opacity = 1})
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0, animations: {
-            self.moviesCollectionView.layer.opacity = 0})
-    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
@@ -75,7 +67,11 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
         let posterPath = movie["poster_path"] as! String
         let imageURL = NSURL(string: baseURL + posterPath)
         
+        cell.MovieCollectionImage.alpha = 0
         cell.MovieCollectionImage.setImageWith(imageURL! as URL)
+        UIView.animate(withDuration: 1, animations: {
+            cell.MovieCollectionImage.alpha = 1
+        })
         cell.MovieCollectionTitle.text = title
         cell.MovieCollectionOverView.text = overview
        
