@@ -43,6 +43,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 Describe any challenges encountered while building the app.
 
+My main problem was thinking too hard about 1 part. Needed to take a break and come back to the problem in order to realize what the actual problem was.
+
 ## License
 
     Copyright [yyyy] [name of copyright owner]
