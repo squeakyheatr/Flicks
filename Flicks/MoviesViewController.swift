@@ -50,10 +50,21 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         task.resume()
+
+            
         MovieTableView.refreshControl = self.refreshControl
         self.refreshControl.addTarget(self, action: "didRefreshList", for: .valueChanged )
     }
 
+        override func viewDidAppear(_ animated: Bool) {
+            UIView.animate(withDuration: 2, animations: {
+                    self.MovieTableView.layer.opacity = 1})
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 0, animations: {
+            self.MovieTableView.layer.opacity = 0})
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

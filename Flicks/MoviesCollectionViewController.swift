@@ -44,7 +44,16 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
         task.resume()
 
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 2, animations: {
+            self.moviesCollectionView.layer.opacity = 1})
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 0, animations: {
+            self.moviesCollectionView.layer.opacity = 0})
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
         if let movies = movies{
