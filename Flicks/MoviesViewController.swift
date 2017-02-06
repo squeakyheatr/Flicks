@@ -23,6 +23,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     var filteredMovies: [NSDictionary]?
     
+    var endPoint = String()
+    
     
     
     var refreshControl = UIRefreshControl()
@@ -40,7 +42,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.errorView.isHidden = true
 
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endPoint)?api_key=\(apiKey)")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
@@ -92,14 +94,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         let overview = movie["overview"] as! String
         let title = movie["title"] as! String
-        let posterPath = movie["poster_path"] as! String
-        let imageURL = NSURL(string: baseURL + posterPath)
         
-        cell.MovieImageView.alpha = 0
-        cell.MovieImageView.setImageWith(imageURL! as URL)
-        UIView.animate(withDuration: 1, animations: {
-            cell.MovieImageView.alpha = 1
-        })
+        if let posterPath = movie["poster_path"] as? String  {
+            
+            let imageURL = NSURL(string: baseURL + posterPath)
+        
+            cell.MovieImageView.alpha = 0
+            cell.MovieImageView.setImageWith(imageURL! as URL)
+            UIView.animate(withDuration: 1, animations: {
+                cell.MovieImageView.alpha = 1
+            })
+        }
         cell.TitleLabel.text = title
         cell.OverViewLabel.text = overview
 
@@ -147,6 +152,19 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         searchBar.showsCancelButton = false
         searchBar.text = "Search"
         searchBar.resignFirstResponder()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let segCell = sender as! UITableViewCell
+        let indexPath = MovieTableView.indexPath(for: segCell)
+        let segMovie = movies![indexPath!.row]
+        
+        let detailsVC = segue.destination as! DetailViewController
+        
+        detailsVC.movieDic = segMovie
+        
+     
     }
     
 
