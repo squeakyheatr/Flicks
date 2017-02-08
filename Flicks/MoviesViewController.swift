@@ -4,7 +4,11 @@
 //
 //  Created by Robert Mitchell on 1/29/17.
 //  Copyright © 2017 Robert Mitchell. All rights reserved.
-//
+// add launchs screen
+// add app logo
+ // google search tools -> usage rights -> labeled for reuse, or label for reuse with modification
+ // also can pay for usage rights 1 time fee
+ 
 
 import UIKit
 import AFNetworking
@@ -86,6 +90,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+
+        cell.selectionStyle = .none
+        cell.accessoryType = .none
+        
         
         let baseURL = "https://image.tmdb.org/t/p/w500"
         
@@ -155,19 +163,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        if segue.identifier == "DetailViewController" {
+            
         let segCell = sender as! UITableViewCell
         let indexPath = MovieTableView.indexPath(for: segCell)
         let segMovie = movies![indexPath!.row]
         
         let detailsVC = segue.destination as! DetailViewController
         
-        detailsVC.movieDic = segMovie
+        print(segue.identifier)
         
+        detailsVC.movieDic = segMovie
+        }
      
     }
-    
-
 
 }
  

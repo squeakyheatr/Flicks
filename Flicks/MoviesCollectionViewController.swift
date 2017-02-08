@@ -72,8 +72,6 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
         UIView.animate(withDuration: 1, animations: {
             cell.MovieCollectionImage.alpha = 1
         })
-        cell.MovieCollectionTitle.text = title
-        cell.MovieCollectionOverView.text = overview
        
         return cell
     }

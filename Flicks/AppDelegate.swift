@@ -33,12 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [nowPlayingViewContoller, topRatedViewContoller]
+        tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
         
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
-        
+       
         return true
     }
 
