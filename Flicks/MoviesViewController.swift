@@ -165,15 +165,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailViewController" {
             
-        let segCell = sender as! UITableViewCell
-        let indexPath = MovieTableView.indexPath(for: segCell)
-        let segMovie = movies![indexPath!.row]
+            let segCell = sender as! UITableViewCell
+            let indexPath = MovieTableView.indexPath(for: segCell)
+            let segMovie = movies![indexPath!.row]
         
-        let detailsVC = segue.destination as! DetailViewController
-        
-        print(segue.identifier)
-        
-        detailsVC.movieDic = segMovie
+            let detailsVC = segue.destination as! DetailViewController
+            
+            detailsVC.movieDic = segMovie
         }
      
     }

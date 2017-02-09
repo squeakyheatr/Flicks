@@ -11,16 +11,20 @@ import AFNetworking
 
 private let reuseIdentifier = "Cell"
 
-class MoviesCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class MoviesCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
 
+    @IBOutlet var searchBar: UISearchBar!
    
     var movies: [NSDictionary]?
+    
+    var filteredMovies: [NSDictionary]?
     
     @IBOutlet var moviesCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        searchBar.delegate = self
         moviesCollectionView.dataSource = self
         moviesCollectionView.delegate = self
         
@@ -33,6 +37,8 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                                         
                     self.movies = dataDictionary["results"] as! [NSDictionary]
+                    self.filteredMovies = self.movies
+
                     self.moviesCollectionView.reloadData()
                     
                     
@@ -48,8 +54,8 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
-        if let movies = movies{
-            return self.movies!.count
+        if let movies = filteredMovies{
+            return movies.count
         } else {
             return 0
         }
@@ -60,8 +66,9 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
     
         let baseURL = "https://image.tmdb.org/t/p/w500"
+        let movie = filteredMovies![indexPath.row]
+
         
-        let movie = self.movies![indexPath.row]
         let overview = movie["overview"] as! String
         let title = movie["title"] as! String
         let posterPath = movie["poster_path"] as! String
@@ -76,5 +83,34 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
         return cell
     }
 
-
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredMovies = searchText.isEmpty ? movies : movies?.filter({(movie: NSDictionary) -> Bool in
+            return (movie["title"] as! String).range(of: searchText, options: .caseInsensitive) != nil
+        })
+        
+        moviesCollectionView.reloadData()
+    }
+    
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = "Search"
+        searchBar.resignFirstResponder()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let segCell = sender as! UICollectionViewCell
+        let indexPath = moviesCollectionView.indexPath(for: segCell)
+        let segMovie = movies![indexPath!.row]
+            
+        let detailsVC = segue.destination as! DetailViewController
+        
+        detailsVC.movieDic = segMovie
+        
+    }
 }
