@@ -23,16 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let nowPlayingViewContoller = nowPlayingNavigationController.topViewController as! MoviesViewController
         nowPlayingViewContoller.endPoint = "now_playing"
         nowPlayingNavigationController.tabBarItem.title = "Now Playing"
-        nowPlayingNavigationController.tabBarItem.image = UIImage(named: "")
+        nowPlayingNavigationController.tabBarItem.image = UIImage(named: "nowPlaying")
         
         let topRatedNavigationController = storyBoard.instantiateViewController(withIdentifier: "MoviesNavigationController") as! UINavigationController
         let topRatedViewContoller = topRatedNavigationController.topViewController as! MoviesViewController
         topRatedViewContoller.endPoint = "top_rated"
         topRatedNavigationController.tabBarItem.title = "Top Rated"
-        topRatedNavigationController.tabBarItem.image = UIImage(named: "")
-            
+        topRatedNavigationController.tabBarItem.image = UIImage(named: "topRated")
+        
+        let upComingNavigationController = storyBoard.instantiateViewController(withIdentifier: "MoviesNavigationController") as! UINavigationController
+        let upComingViewContoller = upComingNavigationController.topViewController as! MoviesViewController
+        upComingViewContoller.endPoint = "upcoming"
+        upComingNavigationController.tabBarItem.title = "Upcoming"
+        upComingNavigationController.tabBarItem.image = UIImage(named: "upComing")
+        
             let tabBarController = UITabBarController()
-            tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
+            tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController, upComingNavigationController]
 
             
             window?.rootViewController = tabBarController
