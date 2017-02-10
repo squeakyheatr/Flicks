@@ -9,7 +9,6 @@
 import UIKit
 import AFNetworking
 
-private let reuseIdentifier = "Cell"
 
 class MoviesCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
 
@@ -19,17 +18,23 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
     
     var filteredMovies: [NSDictionary]?
     
+    var moviesEnd = MoviesViewController()
+    var endpoint = String()
+    
+    
     @IBOutlet var moviesCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         searchBar.delegate = self
         moviesCollectionView.dataSource = self
         moviesCollectionView.delegate = self
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
@@ -41,15 +46,14 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
 
                     self.moviesCollectionView.reloadData()
                     
-                    
-                    
-                    
                 }
             }
         }
         task.resume()
-
+        
     }
+    
+    
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -65,21 +69,64 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
     
-        let baseURL = "https://image.tmdb.org/t/p/w500"
+        let lowBaseURL = "https://image.tmdb.org/t/p/w45"
+        let highBaseURL = "https://image.tmdb.org/t/p/w500"
+        
         let movie = filteredMovies![indexPath.row]
 
         
-        let overview = movie["overview"] as! String
-        let title = movie["title"] as! String
-        let posterPath = movie["poster_path"] as! String
-        let imageURL = NSURL(string: baseURL + posterPath)
+        if let posterPath = movie["poster_path"] as? String {
         
-        cell.MovieCollectionImage.alpha = 0
-        cell.MovieCollectionImage.setImageWith(imageURL! as URL)
-        UIView.animate(withDuration: 1, animations: {
-            cell.MovieCollectionImage.alpha = 1
+        
+        let lowImageURL = NSURL(string: lowBaseURL + posterPath)
+        
+        let highImageURL = NSURL(string: highBaseURL + posterPath)
+        
+        let smallImageRequest = NSURLRequest(url: lowImageURL as! URL)
+        let largeImageRequest = NSURLRequest(url: highImageURL as! URL)
+        
+        
+        
+        //cell.MovieImageView.setImageWith(imageURL! as URL)
+        
+        cell.MovieCollectionImage.setImageWith(
+            smallImageRequest as URLRequest,
+            placeholderImage: nil,
+            success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
+                
+                // smallImageResponse will be nil if the smallImage is already available
+                // in cache (might want to do something smarter in that case).
+                cell.MovieCollectionImage.alpha = 0.0
+                cell.MovieCollectionImage.image = smallImage;
+                
+                UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                    
+                    cell.MovieCollectionImage.alpha = 1.0
+                    
+                }, completion: { (sucess) -> Void in
+                    
+                    // The AFNetworking ImageView Category only allows one request to be sent at a time
+                    // per ImageView. This code must be in the completion block.
+                    cell.MovieCollectionImage.setImageWith(
+                        largeImageRequest as URLRequest,
+                        placeholderImage: smallImage,
+                        success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+                            
+                            cell.MovieCollectionImage.image = largeImage;
+                            
+                    },
+                        failure: { (request, response, error) -> Void in
+                            // do something for the failure condition of the large image request
+                            // possibly setting the ImageView's image to a default image
+                    })
+                })
+        },
+            failure: { (request, response, error) -> Void in
+                // do something for the failure condition
+                // possibly try to get the large image
         })
-       
+
+        }
         return cell
     }
 

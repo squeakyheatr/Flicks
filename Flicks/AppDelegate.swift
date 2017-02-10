@@ -13,11 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        
 
         let nowPlayingNavigationController = storyBoard.instantiateViewController(withIdentifier: "MoviesNavigationController") as! UINavigationController
         let nowPlayingViewContoller = nowPlayingNavigationController.topViewController as! MoviesViewController
@@ -30,14 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         topRatedViewContoller.endPoint = "top_rated"
         topRatedNavigationController.tabBarItem.title = "Top Rated"
         topRatedNavigationController.tabBarItem.image = UIImage(named: "")
-        
-        
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
-        
-        window?.rootViewController = tabBarController
-        window?.makeKeyAndVisible()
-        
+            
+            let tabBarController = UITabBarController()
+            tabBarController.viewControllers = [nowPlayingNavigationController, topRatedNavigationController]
+
+            
+            window?.rootViewController = tabBarController
+            window?.makeKeyAndVisible()
        
         return true
     }
