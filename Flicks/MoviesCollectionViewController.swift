@@ -156,7 +156,7 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
         
         let segCell = sender as! UICollectionViewCell
         let indexPath = moviesCollectionView.indexPath(for: segCell)
-        let segMovie = movies![indexPath!.row]
+        let segMovie = filteredMovies![indexPath!.row]
             
         let detailsVC = segue.destination as! DetailViewController
         
@@ -176,7 +176,7 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
     
     @IBAction func backView(_ sender: Any) {
         
-  self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
 }
