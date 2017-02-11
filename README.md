@@ -87,7 +87,15 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [X] List anything else that you can get done to improve the app functionality!
+- Added a new color to the navigation bar
+- Added color to the navigation bar title and buttons
+- Title displays as navigation title in details view
+- Changed font and size of navigation title
+- Added a splash screen
+- Added an app Icon
+- Changed titles of Navigation Bar Buttons
+- Added a Upcoming Tab for upcoming movies
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
@@ -104,8 +112,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
-
+Issues with layout mostly.
 ## License
 
     Copyright [yyyy] [name of copyright owner]
