@@ -21,6 +21,9 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
+        
         movieScrollView.contentSize = CGSize(width: movieScrollView.frame.size.width, height: detailLabelView.frame.origin.y + detailLabelView.frame.size.height)
         let baseURL = "https://image.tmdb.org/t/p/w500"
         let title = movieDic["title"] as! String
@@ -37,7 +40,7 @@ class DetailViewController: UIViewController {
             MoviePosterImage.setImageWith(imageURL! as URL)
         }
         
-        // Do any additional setup after loading the view.
+        self.navigationItem.title = title
     }
 
     override func didReceiveMemoryWarning() {

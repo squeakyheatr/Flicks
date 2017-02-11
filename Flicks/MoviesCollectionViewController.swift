@@ -18,23 +18,26 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
     
     var filteredMovies: [NSDictionary]?
     
-    var moviesEnd = MoviesViewController()
-    var endpoint = String()
+    var endPoint = String()
     
     
     @IBOutlet var moviesCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         
+        changeTitle()
         
+        self.navigationItem.leftBarButtonItem?.title = "List"
+        self.navigationItem.leftBarButtonItem?.tintColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1)
         
         searchBar.delegate = self
         moviesCollectionView.dataSource = self
         moviesCollectionView.delegate = self
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")!
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endPoint)?api_key=\(apiKey)")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
@@ -158,6 +161,22 @@ class MoviesCollectionViewController: UIViewController, UICollectionViewDataSour
         let detailsVC = segue.destination as! DetailViewController
         
         detailsVC.movieDic = segMovie
+    }
+    
+    func changeTitle(){
+        if endPoint == "now_playing" {
+            self.navigationItem.title = "Now Playing"
+        } else if endPoint == "top_rated" {
+            self.navigationItem.title = "Top Rated"
+        } else {
+            self.navigationItem.title = "Upcoming"
+        }
         
     }
+    
+    @IBAction func backView(_ sender: Any) {
+        
+  self.navigationController?.popViewController(animated: true)
+    }
+    
 }

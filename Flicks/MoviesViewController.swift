@@ -40,6 +40,19 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         super.viewDidLoad()
         MovieTableView.dataSource = self
         searchBar.delegate = self
+        
+        navigationController!.navigationBar.barTintColor = UIColor.lightGray
+        navigationController!.navigationBar.titleTextAttributes =
+            ([NSFontAttributeName: UIFont(name: "AmericanTypewriter-Bold", size: 17)!,
+              NSForegroundColorAttributeName: UIColor.red])
+        
+        self.navigationItem.rightBarButtonItem?.title = "Posters"
+        self.navigationItem.rightBarButtonItem?.tintColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1)
+
+        
+        
+        changeTitle()
+        
 
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
@@ -216,9 +229,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         } else {
             
             let movieCollectionVC = segue.destination as! MoviesCollectionViewController
-            movieCollectionVC.endpoint = endPoint
+            movieCollectionVC.endPoint = endPoint
         }
      
+    }
+    
+    func changeTitle(){
+        if endPoint == "now_playing" {
+            self.navigationItem.title = "Now Playing"
+        } else if endPoint == "top_rated" {
+            self.navigationItem.title = "Top Rated"
+        } else {
+            self.navigationItem.title = "Upcoming"
+        }
+        
     }
 
 }

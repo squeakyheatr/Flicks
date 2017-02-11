@@ -103,7 +103,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="1pM-AG-ZES">
-                        <barButtonItem key="rightBarButtonItem" title="MoviePosters" id="ibJ-mx-krj">
+                        <barButtonItem key="rightBarButtonItem" id="ibJ-mx-krj">
                             <connections>
                                 <segue destination="H2d-hm-sp8" kind="show" identifier="MoviesCollectionViewController" id="4qH-6T-nnK"/>
                             </connections>
@@ -208,11 +208,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TkZ-J2-HCe">
-                                                    <rect key="frame" x="0.0" y="0.0" width="155" height="294"/>
+                                                    <rect key="frame" x="4" y="4" width="147" height="286"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                             </subviews>
                                         </view>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="MovieCollectionImage" destination="TkZ-J2-HCe" id="4DE-X2-E59"/>
                                             <segue destination="i7M-f3-f7S" kind="show" id="WaK-9Q-gRD"/>
@@ -228,7 +229,13 @@
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Now Playing" id="kdA-oE-X4D"/>
+                    <navigationItem key="navigationItem" title="Now Playing" id="kdA-oE-X4D">
+                        <barButtonItem key="leftBarButtonItem" id="JSo-fe-O6N">
+                            <connections>
+                                <action selector="backView:" destination="H2d-hm-sp8" id="KJC-g0-cG7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="moviesCollectionView" destination="dgp-yO-mek" id="lj9-5v-6te"/>
                         <outlet property="searchBar" destination="gAj-vQ-bIJ" id="QMe-FP-nRL"/>
@@ -240,6 +247,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="F1P-d2-38u"/>
+        <segue reference="WaK-9Q-gRD"/>
     </inferredMetricsTieBreakers>
 </document>
