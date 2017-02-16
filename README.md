@@ -106,6 +106,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
+![alt tag](FlicksP2.gif)
 
 <img src='http://imgur.com/1ZInhj3.gif
 ' title='Video Walkthrough' width='' alt='Video Walkthrough' />
